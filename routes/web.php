@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::get('/', function () {
 Route::get( '/register', [ UserController::class, 'create' ] );
 Route::resource( 'users', UserController::class );
 Route::resource( 'students', StudentController::class );
+Route::resource( 'employees', EmployeeController::class );
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
