@@ -16,7 +16,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = DB::table( 'students' )->simplePaginate( 1 );
+        $students = DB::table( 'students' )->simplePaginate( 5 );
 
         return view( 'students.index', ['students' => $students] );
     }
@@ -50,8 +50,7 @@ class StudentController extends Controller
 
             $student->save();
 
-            echo 'students successfully registered!<br><br>';
-            echo '<a href="' . route( 'students.create' ) . '">Add another Student</a><br><br>';
+            echo 'Student successfully registered!<br><br>';
             echo '<a href="' . route( 'students.index' ) . '">Index</a>';
 
         } catch (\Throwable $th) {
@@ -81,7 +80,21 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        //
+        try{
+            $student = Student::find( $id );
+
+            if( !empty( $student ) ){
+                return view( 'students.update', compact( 'student' ) );
+            }
+    
+            return redirect()->route( 'students.index' );
+        }
+        catch (\Throwable $th) {
+
+            $module = 'students';
+            $error = $th->getMessage();
+            return view('errors.register', compact( 'error', 'module') );
+        }
     }
 
     /**
@@ -93,7 +106,25 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $request->validate( ['first_name'=>'required'] );
+
+            $student = Student::find( $id );
+
+            $student->first_name = $request->first_name;
+            $student->last_name  = $request->last_name;
+            $student->address    = $request->address;
+
+            $student->save();
+
+            echo 'Student successfully updated!<br><br>';
+            echo '<a href="' . route( 'students.index' ) . '">Index</a>';
+        } catch (\Throwable $th) {
+
+            $module = 'students';
+            $error = $th->getMessage();
+            return view('errors.register', compact( 'error', 'module') );
+        }
     }
 
     /**
@@ -104,6 +135,27 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+        try{
+            $student = Student::find( $id );
+
+            if( !empty( $student ) ){
+                $student->delete();
+                echo 'student successfully deleted!<br><br>';
+                echo '<a href="' . route( 'students.index' ) . '">Index</a>';
+            }
+            else{
+                
+                return redirect()->route( 'students.index' );
+            }
+    
+        }
+        catch (\Throwable $th) {
+
+            $module = 'students';
+            $error = $th->getMessage();
+            return view('errors.register', compact( 'error', 'module') );
+        }
+
     }
 }

@@ -5,21 +5,38 @@
 <div class="container-center">
     <h2>Students:</h2>
 
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Name Full</th>
-        </tr>
-        
-        @foreach ($students as $student)
-        <tr>
-            <td>{{ $student->id }}</td>
-            <td>{{ $student->first_name }} - {{ $student->last_name }}</td>
-        </tr>   
-        @endforeach
+    @if( $students->count() > 0 )
 
-    </table>
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>Name Full</th>
+            </tr>
+            
+            @foreach ($students as $student)
+            <tr>
+                <td>{{ $student->id }}</td>
+                <td>{{ $student->first_name }} - {{ $student->last_name }}</td>
+                <form method="POST" action="{{ route( 'students.destroy', $student->id ) }}">
+                    @csrf
+                    @method('DELETE')
+                    <td><input type="submit" name="delete" value="delete"></td>
+                </form>
+                <td><a href="{{route( 'students.edit', $student->id )}}">Update</a></td>
+            </tr>   
+            @endforeach
 
-    {{ $students->links() }}
+        </table>
+
+        {{ $students->links() }}
+
+    @else
+        <p>No students registered</p>
+    @endif
+
+</div>
+
+<div class="container-center">
+    <a href="{{route('students.create')}}">Add a Student</a>
 </div>
 @endsection
