@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="{{asset('css/main.css')}}">
 @extends('layouts.app')
 
 @section('content')
@@ -24,5 +25,11 @@
             </div>
         </div>
     </div>
+</div>
+<div class="container-center">
+    <hr>
+    <a href="{{route('students.index')}}">Students</a>
+    <hr>
+    <a href="{{route('employees.index')}}">Employees</a>
 </div>
 @endsection

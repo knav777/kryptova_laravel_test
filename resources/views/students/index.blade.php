@@ -8,7 +8,7 @@
     @if( $students->count() > 0 )
 
         <table border="1">
-            <tr>
+            <tr align="center">
                 <th>ID</th>
                 <th>Name Full</th>
             </tr>
