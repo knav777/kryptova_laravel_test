@@ -53,10 +53,8 @@ class UserController extends Controller
             $user->role          = $request->role;
 
             if( !is_null( $request->picture ) ){
-                $image_crop_base_64 = $request->picture;
-                $request->picture   = base64_decode( substr( $image_crop_base_64, strpos( $image_crop_base_64, "," ) + 1 ) );
-    
                 $valid_formats = array( "jpg", "png", "gif", "bmp", "jpeg" );
+                $filename = $request->file('picture')->getClientOriginalName();
 
                 $name = $_FILES['picture']['name'];
                 $size = $_FILES['picture']['size'];
@@ -67,10 +65,15 @@ class UserController extends Controller
                 if ( !in_array( $image_format[1], $valid_formats ) ) throw new Exception( 'Invalid file format on the photo..' );
                 if ( $size > ( 3 * 1024 * 1024 ) ) throw new Exception( 'Image file size max 3 MB' );
     
-                $name = time() . '_PROFILE_' . $name;
-                Storage::disk( 'users' )->put( $name, $request->picture );
-
-                $user->profile_picture = $name;
+                $folder = md5( $user->name );
+                $path = 'public/users/' . $folder . '/';
+    
+                $year = date( 'Y' );
+                $path = storage_path( 'app/public/users/' . $folder . '/' . $year );
+    
+                $file = $request->file( 'picture' );
+                $file->move( $path , $filename );
+                $user->profile_picture = $path . '/' . $name;
             }
 
             $user->save();
