@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -15,7 +16,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $students = DB::table( 'students' )->simplePaginate( 1 );
+
+        return view( 'students.index', ['students' => $students] );
     }
 
     /**
@@ -37,6 +40,8 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         try {
+            $request->validate( ['first_name'=>'required'] );
+
             $student = new Student();
 
             $student->first_name = $request->first_name;
@@ -45,13 +50,15 @@ class StudentController extends Controller
 
             $student->save();
 
-            echo 'students successfully registered!<br>';
-            echo '<a href="' . route( 'students.create' ) . '">Add another Student</a>';
+            echo 'students successfully registered!<br><br>';
+            echo '<a href="' . route( 'students.create' ) . '">Add another Student</a><br><br>';
+            echo '<a href="' . route( 'students.index' ) . '">Index</a>';
 
         } catch (\Throwable $th) {
 
+            $module = 'students';
             $error = $th->getMessage();
-            return view('errors.register', compact('error'));
+            return view('errors.register', compact( 'error', 'module') );
         }
     }
 

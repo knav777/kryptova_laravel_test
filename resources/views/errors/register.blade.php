@@ -2,4 +2,8 @@
 
 <p>Error: {{$error}}</p>
 
-<a href="{{route('users.create')}}">Try again</a>
+@if( $module === 'students' )
+    <a href="{{route('students.create')}}">Try again</a>
+@else
+    <a href="{{route('users.create')}}">Try again</a>
+@endif

@@ -1,16 +1,9 @@
-<style>
-    form{
-        min-width: 200px;
-        max-width: 800px;
-        padding: 10px;
-        margin: 20px auto;
-    }
-</style>
+<link rel="stylesheet" href="{{asset('css/main.css')}}">
 
 @extends('layouts.app')
 
 @section('content')
-    <form action="{{route('users.store')}}" method="POST" enctype="multipart/form-data">
+    <form action="{{route('users.store')}}" class="container-center" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="form-group">
             <h2>Signup</h2>

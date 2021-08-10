@@ -81,8 +81,9 @@ class UserController extends Controller
 
         } catch (\Throwable $th) {
 
+            $module = 'users';
             $error = $th->getMessage();
-            return view('errors.register', compact('error'));
+            return view('errors.register', compact( 'error', 'module' ));
         }
     }
 
