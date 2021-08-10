@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -38,4 +41,21 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function login(Request $request){
+
+        $request->validate( ['email'=>'required', 'password'=>'required'] );
+
+        $user = User::where( ['email'=>$request->email] )->first();
+
+        if( !empty( $user ) ){
+            $is_pass = password_verify( $request->password, $user->password );
+
+            if( $is_pass ){
+
+                Auth::login( $user );
+            }
+        }
+
+        return redirect()->route( 'login' );
+    }
 }

@@ -49,7 +49,7 @@ class UserController extends Controller
             $user->email         = $request->email;
             $user->date_of_birth = $request->dob;
             $user->address       = $request->address;
-            $user->password      = $request->password;
+            $user->password      = password_hash( $request->password ,PASSWORD_DEFAULT, ["cost"=>15] );
             $user->role          = $request->role;
 
             if( !is_null( $request->picture ) ){
@@ -75,8 +75,9 @@ class UserController extends Controller
 
             $user->save();
 
-            echo 'user successfully registered!<br>';
-            echo '<a href="' . route( 'users.create' ) . '">Register another User</a>';
+            echo 'user successfully registered! (remember to log in)<br><br>';
+            echo '<a href="' . route( 'users.create' ) . '">Register another User</a><br><br>';
+            echo '<a href="' . route( 'home' ) . '">Go to Login</a>';
 
         } catch (\Throwable $th) {
 
